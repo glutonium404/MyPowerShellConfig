@@ -50,6 +50,25 @@ function clone {
 }
 
 function repo {
+    [CmdletBinding()]
+    param(
+        [switch]$o
+    )
+
+    if($o) {
+        $remote = git config --get remote.origin.url
+
+        if (!$remote) {
+            Write-Host "Error: Not a git repository or no remote origin set." -ForegroundColor Red
+            return
+        }
+
+        # clean SSH format (git@github.com:user/repo.git) to HTTPS format if needed
+        $url = $remote -replace '^git@github\.com:', 'https://github.com/' -replace '\.git$', ''
+        Start-Process $url
+        return
+    }
+
     $fzfCmd = Get-Command fzf -ErrorAction SilentlyContinue
 
     if(!$fzfCmd) { Write-Host "Error: fzf not found"; return -1 }
