@@ -17,3 +17,12 @@
         Write-Error "git.exe not found, cannot resolve less path."
     }
 }
+
+& {
+    $cmakePath = "C:\Program Files\CMake\bin\cmake.exe"
+    if (Test-Path $cmakePath) {
+        Set-Alias -Name cmake -Value $cmakePath -Scope Global -Force
+    } else {
+        Write-Error "Could not find cmake.exe at $cmakePath"
+    }
+}
